@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            justify-content: space-around;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 20px;
+            flex: 1 1 45%;
+            min-width: 300px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .card h2 {
+            margin: 0 0 20px 0;
+            font-size: 1.5em;
+            color: #007bff;
+        }
+        .card canvas {
+            width: 100%;
+            height: 300px;
+        }
+        @media (max-width: 768px) {
+            .card {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Data Visualization Dashboard</h1>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h2>Bar Chart</h2>
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>Line Chart</h2>
+            <canvas id="lineChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>Pie Chart</h2>
+            <canvas id="pieChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>Doughnut Chart</h2>
+            <canvas id="doughnutChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const createConfig = (type, labels, data, label, backgroundColors, borderColors) => ({
+            type: type,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: type === 'bar' || type === 'line' ? {
+                    y: {
+                        beginAtZero: true
+                    }
+                } : {}
+            }
+        });
+
+        const colors = {
+            bar: {
+                background: 'rgba(54, 162, 235, 0.2)',
+                border: 'rgba(54, 162, 235, 1)'
+            },
+            line: {
+                background: 'rgba(75, 192, 192, 0.2)',
+                border: 'rgba(75, 192, 192, 1)'
+            },
+            pie: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)'
+            ],
+            pieBorder: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)'
+            ]
+        };
+
+        const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+        const data = [12, 19, 3, 5, 2, 3];
+
+        new Chart(document.getElementById('barChart'), createConfig('bar', labels, data, 'Sales', colors.bar.background, colors.bar.border));
+        new Chart(document.getElementById('lineChart'), createConfig('line', labels, data, 'Revenue', colors.line.background, colors.line.border));
+        new Chart(document.getElementById('pieChart'), createConfig('pie', ['Red', 'Blue', 'Yellow'], [12, 19, 3], 'Colors', colors.pie, colors.pieBorder));
+        new Chart(document.getElementById('doughnutChart'), createConfig('doughnut', ['Red', 'Blue', 'Yellow'], [12, 19, 3], 'Colors', colors.pie, colors.pieBorder));
+    </script>
+</body>
+</html>
